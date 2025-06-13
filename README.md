@@ -1,17 +1,17 @@
 # Voyage Reservation System - Backend
 
-## Project Overview
+## Aperçu du Projet
 
-This project is a Spring Boot backend application for a voyage (trip) reservation system. It provides APIs for managing entities such as clients, voyages, reservations, ticket types, agents, and payments. The system is designed to be consumed by a frontend application, for example, one built with Angular.
+Ce projet est une application backend Spring Boot pour un système de réservation de voyages. Il fournit des APIs pour gérer des entités telles que les clients, les voyages, les réservations, les types de billets, les agents et les paiements. Le système est conçu pour être consommé par une application frontend, par exemple, une application construite avec Angular.
 
 ---
 
-## Entities
+## Entités
 
-This section describes the data models (entities) used in the application.
+Cette section décrit les modèles de données (entités) utilisés dans l'application.
 
 ### 1. AGENT
-Represents an agent in the system.
+Représente un agent dans le système.
 
 **Attributes:**
 *   `idAgent` (Long, Primary Key, Auto-generated)
@@ -23,10 +23,10 @@ Represents an agent in the system.
 *   `mailAgent` (String, Not Null, Max Length 20)
 
 **Relationships:**
-*   **PAIEMENT**: One-to-Many (An AGENT can be associated with multiple PAIEMENTs). Mapped by `agent` in `PAIEMENT`.
+*   **PAIEMENT**: One-to-Many (Un AGENT peut être associé à plusieurs PAIEMENTs). Mappé par `agent` dans `PAIEMENT`.
 
 ### 2. CLIENT
-Represents a client using the system.
+Représente un client utilisant le système.
 
 **Attributes:**
 *   `idClient` (Long, Primary Key, Auto-generated)
@@ -40,34 +40,34 @@ Represents a client using the system.
 *   `password` (String, Not Null, Max Length 50)
 
 **Relationships:**
-*   **RESERVATION**: One-to-Many (A CLIENT can have multiple RESERVATIONs). Mapped by `client` in `RESERVATION`.
+*   **RESERVATION**: One-to-Many (Un CLIENT peut avoir plusieurs RESERVATIONs). Mappé par `client` dans `RESERVATION`.
 
 ### 3. PAIEMENT
-Represents a payment transaction.
+Représente une transaction de paiement.
 
 **Attributes:**
 *   `codePaiement` (String, Primary Key, Not Null, Max Length 10)
 *   `datePaiement` (Date, Not Null, Format: "yyyy-MM-dd")
 
 **Relationships:**
-*   **RESERVATION**: Many-to-One (A PAIEMENT belongs to one RESERVATION). Join column `reservation`.
-*   **AGENT**: Many-to-One (A PAIEMENT is processed by one AGENT). Join column `agent`.
+*   **RESERVATION**: Many-to-One (Un PAIEMENT appartient à une RESERVATION). Colonne de jointure `reservation`.
+*   **AGENT**: Many-to-One (Un PAIEMENT est traité par un AGENT). Colonne de jointure `agent`.
 
 ### 4. RESERVATION
-Represents a reservation made by a client for a voyage.
+Représente une réservation effectuée par un client pour un voyage.
 
 **Attributes:**
 *   `idReservation` (Long, Primary Key, Auto-generated)
 *   `dateReservation` (Date, Format: "yyyy-MM-dd")
 
 **Relationships:**
-*   **CLIENT**: Many-to-One (A RESERVATION is made by one CLIENT). Join column `client_id`.
-*   **VOYAGE**: Many-to-One (A RESERVATION is for one VOYAGE). Join column `voyage_id`.
-*   **TYPE_BILLET**: Many-to-One (A RESERVATION has one TYPE_BILLET). Join column `type_billet_id`.
-*   **PAIEMENT**: One-to-Many (A RESERVATION can have multiple PAIEMENTs). *Note: This relationship should be mapped by `reservation` in the `PAIEMENT` entity. The `RESERVATION.paiementList` field should have `mappedBy = "reservation"`.*
+*   **CLIENT**: Many-to-One (Une RESERVATION est effectuée par un CLIENT). Colonne de jointure `client_id`.
+*   **VOYAGE**: Many-to-One (Une RESERVATION concerne un VOYAGE). Colonne de jointure `voyage_id`.
+*   **TYPE_BILLET**: Many-to-One (Une RESERVATION a un TYPE_BILLET). Colonne de jointure `type_billet_id`.
+*   **PAIEMENT**: One-to-Many (Une RESERVATION peut avoir plusieurs PAIEMENTs). *Note: Cette relation devrait être mappée par `reservation` dans l'entité `PAIEMENT`. Le champ `RESERVATION.paiementList` devrait avoir `mappedBy = "reservation"`.*
 
 ### 5. TYPE_BILLET
-Represents the type of a ticket (e.g., class, price).
+Représente le type d'un billet (par exemple, classe, prix).
 
 **Attributes:**
 *   `idTypeBillet` (Long, Primary Key, Auto-generated)
@@ -75,10 +75,10 @@ Represents the type of a ticket (e.g., class, price).
 *   `prixTypeBillet` (Double, Not Null)
 
 **Relationships:**
-*   **RESERVATION**: One-to-Many (A TYPE_BILLET can be associated with multiple RESERVATIONs). Mapped by `typeBillet` in `RESERVATION`.
+*   **RESERVATION**: One-to-Many (Un TYPE_BILLET peut être associé à plusieurs RESERVATIONs). Mappé par `typeBillet` dans `RESERVATION`.
 
 ### 6. VOYAGE
-Represents a voyage or trip.
+Représente un voyage ou un trajet.
 
 **Attributes:**
 *   `idVoyage` (Long, Primary Key, Auto-generated)
@@ -87,13 +87,13 @@ Represents a voyage or trip.
 *   `dateVoyage` (Date, Not Null, Format: "yyyy-MM-dd")
 
 **Relationships:**
-*   **RESERVATION**: One-to-Many (A VOYAGE can have multiple RESERVATIONs). Mapped by `voyage` in `RESERVATION`.
+*   **RESERVATION**: One-to-Many (Un VOYAGE peut avoir plusieurs RESERVATIONs). Mappé par `voyage` dans `RESERVATION`.
 
 ---
 
-## Entity Relationship Diagram (PlantUML)
+## Diagramme de Relation des Entités (PlantUML)
 
-The following is a class diagram representing the entities and their relationships in PlantUML format. You can render this diagram using PlantUML tools (e.g., online renderers like [PlantText](https://www.planttext.com/), or IDE plugins).
+Ce qui suit est un diagramme de classes représentant les entités et leurs relations au format PlantUML. Vous pouvez générer ce diagramme en utilisant des outils PlantUML (par exemple, des moteurs de rendu en ligne comme [PlantText](https://www.planttext.com/), ou des plugins IDE).
 
 ```plantuml
 @startuml
@@ -160,145 +160,145 @@ VOYAGE "1" -- "0..*" RESERVATION : reservations
 
 ---
 
-## API Endpoints
+## Points d'accès API (API Endpoints)
 
-This section lists the available API endpoints.
-Base Path Prefix for all controllers: `/tg/voyage_pro/reservation/auth`
-CORS: Enabled for all origins (`*`) for most controllers.
+Cette section liste les points d'accès API disponibles.
+Préfixe de chemin de base pour tous les contrôleurs : `/tg/voyage_pro/reservation/auth`
+CORS : Activé pour toutes les origines (`*`) pour la plupart des contrôleurs.
 
-**Potential Issues/Observations from API Analysis:**
-*   **Inconsistent Response Types**: Some endpoints return direct objects (e.g., `RESERVATION` in `ReservationController.create`), while others use `ResponseEntity<?>`. Using `ResponseEntity` consistently is generally better practice.
-*   **Unconventional HTTP Method**: `ReservationController` uses `GET /update`. Updates should typically be done using `PUT` or `PATCH`. A `GET` request with a body is also unusual and may not work as expected with all HTTP clients. The ID of the reservation to update is also missing from this endpoint's path.
-*   **DTO vs. Entity Usage**: Controllers sometimes accept or return Entities (e.g., `CLIENT` in `ClientController.create`) and sometimes DTOs. A consistent DTO-based approach for API contracts is often preferred.
+**Problèmes Potentiels/Observations de l'Analyse des API:**
+*   **Types de Réponse Incohérents**: Certains points d'accès retournent des objets directs (par ex., `RESERVATION` dans `ReservationController.create`), tandis que d'autres utilisent `ResponseEntity<?>`. Utiliser `ResponseEntity` de manière cohérente est généralement une meilleure pratique.
+*   **Méthode HTTP Non Conventionnelle**: `ReservationController` utilise `GET /update`. Les mises à jour devraient typiquement être effectuées en utilisant `PUT` ou `PATCH`. Une requête `GET` avec un corps de requête est également inhabituelle et pourrait ne pas fonctionner comme attendu avec tous les clients HTTP. L'ID de la réservation à mettre à jour manque également dans le chemin de ce point d'accès.
+*   **Utilisation DTO vs. Entité**: Les contrôleurs acceptent ou retournent parfois des Entités (par ex., `CLIENT` dans `ClientController.create`) et parfois des DTOs. Une approche cohérente basée sur les DTO pour les contrats API est souvent préférée.
 
 ### 1. ClientController
-Base Path: `/tg/voyage_pro/reservation/auth/client`
+Chemin de base : `/tg/voyage_pro/reservation/auth/client`
 
 *   **`POST /create`**
-    *   **Description**: Creates a new client.
+    *   **Description**: Crée un nouveau client.
     *   **Request Method**: `POST`
-    *   **Request Body**: `CLIENT` object (JSON)
-    *   **Response**: `CLIENT` object (JSON), HTTP 200
+    *   **Request Body**: Objet `CLIENT` (JSON)
+    *   **Response**: Objet `CLIENT` (JSON), HTTP 200
 *   **`GET /getAll`**
-    *   **Description**: Retrieves all clients.
+    *   **Description**: Récupère tous les clients.
     *   **Request Method**: `GET`
     *   **Response**: `List<ClientDTO>` (JSON), HTTP 200
 *   **`GET /get/{idClient}`**
-    *   **Description**: Retrieves a specific client by ID.
+    *   **Description**: Récupère un client spécifique par ID.
     *   **Request Method**: `GET`
     *   **Path Variable**: `idClient` (Long)
     *   **Response**: `ClientDTO` (JSON), HTTP 302 (Found)
 *   **`PUT /update/{idClient}`**
-    *   **Description**: Updates an existing client.
+    *   **Description**: Met à jour un client existant.
     *   **Request Method**: `PUT`
     *   **Path Variable**: `idClient` (Long)
-    *   **Request Body**: `ClientDTO` object (JSON)
+    *   **Request Body**: Objet `ClientDTO` (JSON)
     *   **Response**: `ClientDTO` (JSON), HTTP 200
 *   **`DELETE /delete/{idClient}`**
-    *   **Description**: Deletes a client by ID.
+    *   **Description**: Supprime un client par ID.
     *   **Request Method**: `DELETE`
     *   **Path Variable**: `idClient` (Long)
-    *   **Response**: Implementation-specific (likely a status message), HTTP 200
+    *   **Response**: Spécifique à l'implémentation (probablement un message de statut), HTTP 200
 *   **`PUT /search`**
-    *   **Description**: Searches for clients based on criteria.
+    *   **Description**: Recherche des clients selon des critères.
     *   **Request Method**: `PUT`
-    *   **Request Body**: `ClientDTO` object (JSON) for search criteria.
+    *   **Request Body**: Objet `ClientDTO` (JSON) pour les critères de recherche.
     *   **Response**: `List<ClientDTO>` (JSON), HTTP 200
 *   **`GET /refresh`**
-    *   **Description**: Refreshes the client list (exact behavior depends on service implementation).
+    *   **Description**: Rafraîchit la liste des clients (le comportement exact dépend de l'implémentation du service).
     *   **Request Method**: `GET`
     *   **Response**: `List<ClientDTO>` (JSON), HTTP 200
 
 ### 2. ReservationController
-Base Path: `/tg/voyage_pro/reservation/auth/reservation`
+Chemin de base : `/tg/voyage_pro/reservation/auth/reservation`
 
 *   **`POST /create`**
-    *   **Description**: Creates a new reservation.
+    *   **Description**: Crée une nouvelle réservation.
     *   **Request Method**: `POST`
-    *   **Request Body**: `ReservationDTO` object (JSON)
-    *   **Response**: `RESERVATION` object (JSON)
+    *   **Request Body**: Objet `ReservationDTO` (JSON)
+    *   **Response**: Objet `RESERVATION` (JSON)
 *   **`GET /all`**
-    *   **Description**: Retrieves all reservations.
+    *   **Description**: Récupère toutes les réservations.
     *   **Request Method**: `GET`
     *   **Response**: `List<ReservationDTO>` (JSON)
 *   **`GET /update`**
-    *   **Description**: Updates a reservation. *(Potential Issue noted above)*
+    *   **Description**: Met à jour une réservation. *(Problème potentiel noté ci-dessus)*
     *   **Request Method**: `GET`
-    *   **Request Body**: `ReservationDTO` object (JSON)
+    *   **Request Body**: Objet `ReservationDTO` (JSON)
     *   **Response**: `ReservationDTO` (JSON)
 *   **`DELETE /delete/{id}`**
-    *   **Description**: Deletes a reservation by ID.
+    *   **Description**: Supprime une réservation par ID.
     *   **Request Method**: `DELETE`
     *   **Path Variable**: `id` (Long)
     *   **Response**: `boolean`
 
 ### 3. TypeBilletcontroller
-Base Path: `/tg/voyage_pro/reservation/auth/ticket`
+Chemin de base : `/tg/voyage_pro/reservation/auth/ticket`
 
 *   **`POST /create`**
-    *   **Description**: Creates a new ticket type.
+    *   **Description**: Crée un nouveau type de billet.
     *   **Request Method**: `POST`
-    *   **Request Body**: `TYPE_BILLET` object (JSON)
-    *   **Response**: `TYPE_BILLET` object (JSON)
+    *   **Request Body**: Objet `TYPE_BILLET` (JSON)
+    *   **Response**: Objet `TYPE_BILLET` (JSON)
 *   **`GET /getAll`**
-    *   **Description**: Retrieves all ticket types.
+    *   **Description**: Récupère tous les types de billets.
     *   **Request Method**: `GET`
     *   **Response**: `List<TYPE_BILLET>` (JSON)
 *   **`GET /get/{id}`**
-    *   **Description**: Retrieves a specific ticket type by ID.
+    *   **Description**: Récupère un type de billet spécifique par ID.
     *   **Request Method**: `GET`
     *   **Path Variable**: `id` (Long)
     *   **Response**: `TypeBilletDTO` (JSON)
 *   **`PUT /update/{idType}`**
-    *   **Description**: Updates an existing ticket type.
+    *   **Description**: Met à jour un type de billet existant.
     *   **Request Method**: `PUT`
     *   **Path Variable**: `idType` (Long)
-    *   **Request Body**: `TypeBilletDTO` object (JSON)
+    *   **Request Body**: Objet `TypeBilletDTO` (JSON)
     *   **Response**: `TypeBilletDTO` (JSON)
 *   **`DELETE /delete/{id}`**
-    *   **Description**: Deletes a ticket type by ID.
+    *   **Description**: Supprime un type de billet par ID.
     *   **Request Method**: `DELETE`
     *   **Path Variable**: `id` (Long)
     *   **Response**: `boolean`
 
 ### 4. VoyageController
-Base Path: `/tg/voyage_pro/reservation/auth/voyage`
+Chemin de base : `/tg/voyage_pro/reservation/auth/voyage`
 
 *   **`POST /create`**
-    *   **Description**: Creates a new voyage.
+    *   **Description**: Crée un nouveau voyage.
     *   **Request Method**: `POST`
-    *   **Request Body**: `VoyageDTO` object (JSON)
-    *   **Response**: `VOYAGE` or `VoyageDTO` object (JSON), HTTP 201 (Created)
+    *   **Request Body**: Objet `VoyageDTO` (JSON)
+    *   **Response**: Objet `VOYAGE` ou `VoyageDTO` (JSON), HTTP 201 (Created)
 *   **`GET /getAll`**
-    *   **Description**: Retrieves all voyages.
+    *   **Description**: Récupère tous les voyages.
     *   **Request Method**: `GET`
     *   **Response**: `List<VoyageDTO>` (JSON), HTTP 200
 *   **`GET /get/{idVoyage}`**
-    *   **Description**: Retrieves a specific voyage by ID.
+    *   **Description**: Récupère un voyage spécifique par ID.
     *   **Request Method**: `GET`
     *   **Path Variable**: `idVoyage` (Long)
-    *   **Response**: `VOYAGE` object (JSON), HTTP 302 (Found)
+    *   **Response**: Objet `VOYAGE` (JSON), HTTP 302 (Found)
 *   **`DELETE /delete/{idVoyage}`**
-    *   **Description**: Deletes a voyage by ID.
+    *   **Description**: Supprime un voyage par ID.
     *   **Request Method**: `DELETE`
     *   **Path Variable**: `idVoyage` (Long)
-    *   **Response**: Implementation-specific (likely a status message), HTTP 200
+    *   **Response**: Spécifique à l'implémentation (probablement un message de statut), HTTP 200
 *   **`PUT /update/{idVoyage}`**
-    *   **Description**: Updates an existing voyage.
+    *   **Description**: Met à jour un voyage existant.
     *   **Request Method**: `PUT`
     *   **Path Variable**: `idVoyage` (Long)
-    *   **Request Body**: `VoyageDTO` object (JSON)
-    *   **Response**: `VOYAGE` or `VoyageDTO` object (JSON), HTTP 200
+    *   **Request Body**: Objet `VoyageDTO` (JSON)
+    *   **Response**: Objet `VOYAGE` ou `VoyageDTO` (JSON), HTTP 200
 
 ---
 
-# Angular Backend Integration Guide
+# Guide d'Intégration Backend Angular
 
-This guide provides instructions and examples for connecting an Angular application to the project's backend APIs.
+Ce guide fournit des instructions et des exemples pour connecter une application Angular aux APIs backend du projet.
 
-## 1. Setting up Angular Services with HttpClientModule
+## 1. Configuration des Services Angular avec HttpClientModule
 
-To communicate with backend APIs, Angular uses the `HttpClient` service. You need to import `HttpClientModule` into your main application module (usually `app.module.ts`).
+Pour communiquer avec les APIs backend, Angular utilise le service `HttpClient`. Vous devez importer `HttpClientModule` dans votre module d'application principal (généralement `app.module.ts`).
 
 **`app.module.ts`:**
 ```typescript
@@ -325,9 +325,9 @@ import { AppComponent } from './app.component';
 export class AppModule { }
 ```
 
-Now, you can create Angular services and inject `HttpClient` to make HTTP requests.
+Maintenant, vous pouvez créer des services Angular et injecter `HttpClient` pour effectuer des requêtes HTTP.
 
-**Example Service Structure (`client.service.ts`):**
+**Structure d'Exemple de Service (`client.service.ts`):**
 ```typescript
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
@@ -374,9 +374,9 @@ export class ClientService {
 }
 ```
 
-## 2. Example CRUD Operations
+## 2. Exemples d'Opérations CRUD
 
-Here are examples for `CLIENT` and `VOYAGE` entities. Remember to define corresponding DTO interfaces (e.g., `ClientDTO`, `VoyageDTO`) in your Angular application for type safety.
+Voici des exemples pour les entités `CLIENT` et `VOYAGE`. N'oubliez pas de définir les interfaces DTO correspondantes (par ex., `ClientDTO`, `VoyageDTO`) dans votre application Angular pour la sécurité des types.
 
 ### Client Service (`client.service.ts`)
 
@@ -560,10 +560,10 @@ export class VoyageService {
 }
 ```
 
-## 3. Handling Request Elements
+## 3. Gestion des Éléments de Requête
 
-### Request Headers
-Headers like `Content-Type` are often required, especially for `POST` and `PUT` requests sending JSON data.
+### En-têtes de Requête (Request Headers)
+Les en-têtes comme `Content-Type` sont souvent requis, spécialement pour les requêtes `POST` et `PUT` envoyant des données JSON.
 
 ```typescript
 const httpOptions = {
@@ -577,8 +577,8 @@ const httpOptions = {
 // this.http.post(url, data, httpOptions)
 ```
 
-### Path Variables
-Path variables are part of the URL. Use JavaScript template literals to build the URL.
+### Variables de Chemin (Path Variables)
+Les variables de chemin font partie de l'URL. Utilisez les littéraux de gabarit JavaScript pour construire l'URL.
 
 ```typescript
 // For GET /get/{idClient}
@@ -589,8 +589,8 @@ this.http.get<ClientDTO>(`${this.baseUrl}/get/${idClient}`);
 // this.http.put<ClientDTO>(`${this.baseUrl}/update/${idClient}`, clientData, httpOptions);
 ```
 
-### Query Parameters
-Use `HttpParams` to add URL query parameters.
+### Paramètres de Requête (Query Parameters)
+Utilisez `HttpParams` pour ajouter des paramètres de requête URL.
 
 ```typescript
 import { HttpParams } from '@angular/common/http';
@@ -602,10 +602,10 @@ params = params.append('limit', '10');
 
 // this.http.get(url, { params: params });
 ```
-*(Note: The current API specification in `api_and_entity_summary.md` does not show endpoints that explicitly use query parameters, but this is how you would handle them.)*
+*(Note: La spécification API actuelle dans `api_and_entity_summary.md` ne montre pas de points d'accès utilisant explicitement des paramètres de requête, mais c'est ainsi que vous les géreriez.)*
 
-### Request Bodies
-For `POST` and `PUT` requests, the data (usually a JavaScript object matching the expected DTO/Entity structure) is passed as the second argument to `http.post()` or `http.put()`. `HttpClient` automatically converts it to JSON if `Content-Type` is `application/json`.
+### Corps de Requête (Request Bodies)
+Pour les requêtes `POST` et `PUT`, les données (généralement un objet JavaScript correspondant à la structure DTO/Entité attendue) sont passées comme deuxième argument à `http.post()` ou `http.put()`. `HttpClient` les convertit automatiquement en JSON si `Content-Type` est `application/json`.
 
 ```typescript
 // const clientData: Client = { /* ... */ };
@@ -615,9 +615,9 @@ For `POST` and `PUT` requests, the data (usually a JavaScript object matching th
 // this.http.put<VoyageDTO>(`${this.baseUrl}/update/${idVoyage}`, voyageData, this.httpOptions);
 ```
 
-## 4. Basic Error Handling in Angular Services
+## 4. Gestion Basique des Erreurs dans les Services Angular
 
-Use the `catchError` operator from RxJS to handle errors in your service calls.
+Utilisez l'opérateur `catchError` de RxJS pour gérer les erreurs dans vos appels de service.
 
 ```typescript
 import { throwError } from 'rxjs';
@@ -645,17 +645,17 @@ private handleError(error: HttpErrorResponse) {
   return throwError(() => new Error('Something bad happened; please try again later.'));
 }
 ```
-You can then subscribe to these services in your components and handle the errors for the user (e.g., display a message).
+Vous pouvez ensuite vous abonner à ces services dans vos composants et gérer les erreurs pour l'utilisateur (par exemple, afficher un message).
 
 ## 5. CORS (Cross-Origin Resource Sharing)
 
-The backend controllers are annotated with `@CrossOrigin("*")`. This configuration tells the browser to allow requests from any origin (domain, port, or protocol).
+Les contrôleurs backend sont annotés avec `@CrossOrigin("*")`. Cette configuration indique au navigateur d'autoriser les requêtes de n'importe quelle origine (domaine, port ou protocole).
 
-**Implications for Angular Development:**
-*   **Simplified Development**: For simple cases during local development (e.g., Angular app on `http://localhost:4200` and backend on `http://localhost:8080`), you generally **do not need to set up an Angular proxy** (`proxy.conf.json`) to bypass browser's same-origin policy. The backend already permits the cross-origin requests.
-*   **Production**: While `*` is permissive, for production environments, it's often recommended to restrict the allowed origins to the specific domain where your Angular application is hosted for better security. This would be a backend configuration change.
-*   **Cookies/Authentication**: If your application uses cookie-based authentication or sessions, `@CrossOrigin("*")` might not be sufficient, and you might need `allowCredentials = "true"` on the backend along with `withCredentials: true` in your Angular HTTP requests. However, for token-based authentication (e.g., JWT in Authorization header), this is less of an issue.
+**Implications pour le Développement Angular:**
+*   **Développement Simplifié**: Pour les cas simples pendant le développement local (par ex., application Angular sur `http://localhost:4200` et backend sur `http://localhost:8080`), vous n'avez généralement **pas besoin de configurer un proxy Angular** (`proxy.conf.json`) pour contourner la politique de même origine du navigateur. Le backend autorise déjà les requêtes cross-origin.
+*   **Production**: Bien que `*` soit permissif, pour les environnements de production, il est souvent recommandé de restreindre les origines autorisées au domaine spécifique où votre application Angular est hébergée pour une meilleure sécurité. Ce serait un changement de configuration backend.
+*   **Cookies/Authentification**: Si votre application utilise une authentification basée sur les cookies ou des sessions, `@CrossOrigin("*")` pourrait ne pas être suffisant, et vous pourriez avoir besoin de `allowCredentials = "true"` sur le backend ainsi que `withCredentials: true` dans vos requêtes HTTP Angular. Cependant, pour une authentification basée sur les jetons (par ex., JWT dans l'en-tête Authorization), ce problème est moins préoccupant.
 
-This guide should provide a solid starting point for integrating your Angular frontend with the provided backend APIs. Remember to adapt DTO/Entity interfaces and service methods based on the exact requirements of your application.
+Ce guide devrait fournir un point de départ solide pour intégrer votre frontend Angular avec les APIs backend fournies. N'oubliez pas d'adapter les interfaces DTO/Entité et les méthodes de service en fonction des exigences exactes de votre application.
 
 Joël et Ron
