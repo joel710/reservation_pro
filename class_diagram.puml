@@ -1,0 +1,60 @@
+@startuml
+' Entities
+class AGENT {
+  +idAgent: Long
+  +nomAgent: String
+  +prenomAgent: String
+  +sexeAgent: String
+  +dateNaiss: Date
+  +telAgent: String
+  +mailAgent: String
+}
+
+class CLIENT {
+  +idClient: Long
+  +nomClient: String
+  +prenomClient: String
+  +dateNaiss: Date
+  +mailClient: String
+  +telClient: String
+  +sexeClient: String
+  +login: String
+  +password: String
+}
+
+class PAIEMENT {
+  +codePaiement: String
+  +datePaiement: Date
+}
+
+class RESERVATION {
+  +idReservation: Long
+  +dateReservation: Date
+}
+
+class TYPE_BILLET {
+  +idTypeBillet: Long
+  +libelleTypeBillet: String
+  +prixTypeBillet: Double
+}
+
+class VOYAGE {
+  +idVoyage: Long
+  +departVoyage: String
+  +arriveVoyage: String
+  +dateVoyage: Date
+}
+
+' Relationships
+AGENT "1" -- "0..*" PAIEMENT : paiementList
+CLIENT "1" -- "0..*" RESERVATION : reservations
+RESERVATION "1" -- "0..*" PAIEMENT : paiementList
+PAIEMENT "0..*" -- "1" RESERVATION : reservation
+PAIEMENT "0..*" -- "1" AGENT : agent
+RESERVATION "0..*" -- "1" CLIENT : client
+RESERVATION "0..*" -- "1" VOYAGE : voyage
+RESERVATION "0..*" -- "1" TYPE_BILLET : typeBillet
+TYPE_BILLET "1" -- "0..*" RESERVATION : reservations
+VOYAGE "1" -- "0..*" RESERVATION : reservations
+
+@enduml
