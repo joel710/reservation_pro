@@ -84,6 +84,17 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<spring.datasource.url>jdbc:postgresql://localhost:5432/agence-voyage</spring.datasource.url>
+				<spring.datasource.username>postgres</spring.datasource.username>
+				<spring.datasource.password>root</spring.datasource.password>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<plugin>
